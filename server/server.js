@@ -1,12 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const userRouter = require('./user/userRoutes');
+const cors = require('cors');
 
 const server = express();
 const PORT = process.env.PORT || 8080;
 
 server.use(express.json());
-server.use('/user', userRouter);
+server.use(cors());
+server.use('/users', userRouter);
 
 mongoose
   .connect('mongodb://localhost/allergyfinder')
