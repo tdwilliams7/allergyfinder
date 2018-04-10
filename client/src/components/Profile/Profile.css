@@ -1,0 +1,15 @@
+.severe {
+  background-color: rgb(243, 147, 147);
+}
+
+.moderate {
+  background-color: rgb(97, 67, 6);
+}
+
+.avoid {
+  background-color: rgb(243, 211, 147);
+}
+
+.clear {
+  background-color: rgb(198, 226, 226);
+}
