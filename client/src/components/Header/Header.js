@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import { Container } from 'styled-container-component';
-import { Button } from 'styled-button-component';
-// import { Navbar, NavbarLink } from 'styled-navbar-component';
-import { Nav } from 'styled-nav-component';
 import styled from 'styled-components';
 import { Flexrow, Flexcolumn } from '../../style/layout';
 
@@ -12,19 +8,6 @@ import { Flexrow, Flexcolumn } from '../../style/layout';
 import { connect } from 'react-redux';
 
 class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hidden: true
-    };
-  }
-
-  handleOpenCloseNav() {
-    this.setState({
-      hidden: !this.state.hidden
-    });
-  }
-
   render() {
     return (
       <Navbar>
