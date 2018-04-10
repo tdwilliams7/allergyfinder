@@ -23,4 +23,8 @@ userRouter.post('/signUp', (req, res) => {
   }
 });
 
+userRouter.post('/login', (req, res) => {
+  console.log(req.body);
+});
+
 module.exports = userRouter;

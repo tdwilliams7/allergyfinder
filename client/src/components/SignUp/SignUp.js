@@ -1,33 +1,28 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import { withRouter } from 'react-router-dom';
+
+// Redux stuff
+import { connect } from 'react-redux';
+import { newUser } from '../../store/actions/userActions';
 
 class Signup extends Component {
   state = {
     name: '',
     email: '',
     password: '',
-    emailDup: false
+    emailDup: false,
+    userCreated: false
   };
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.userCreated) {
+      this.props.history.push('/login');
+    }
+  }
 
   submitHandler = event => {
     event.preventDefault();
-    axios
-      .post('http://localhost:8080/users/signup', this.state)
-      .then(success => {
-        setTimeout(() => {
-          this.props.history.push('/login');
-        }, 750);
-      })
-      .catch(err => {
-        const errorCode = err.response.data.err.code;
-        console.log({ err: err.response.data.err.code });
-        if (errorCode === 11000) {
-          this.setState({
-            emailDup: true
-          });
-        }
-      });
+    this.props.newUser(this.state.name, this.state.email, this.state.password);
   };
 
   inputChangeHandler = ({ target }) => {
@@ -61,7 +56,7 @@ class Signup extends Component {
           />
           <button>submit</button>
         </form>
-        {this.state.emailDup ? (
+        {this.props.emailDup ? (
           <div>Account with email {this.state.email} already exists. </div>
         ) : null}
       </div>
@@ -69,4 +64,11 @@ class Signup extends Component {
   }
 }
 
-export default withRouter(Signup);
+const mapStateToProps = state => {
+  return {
+    emailDup: state.userReducer.dupUser,
+    userCreated: state.userReducer.userCreated
+  };
+};
+
+export default withRouter(connect(mapStateToProps, { newUser })(Signup));
