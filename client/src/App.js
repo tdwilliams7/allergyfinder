@@ -5,19 +5,22 @@ import './App.css';
 // Components
 import Signup from './components/SignUp/SignUp';
 import Login from './components/Login/Login';
+import Header from './components/Header/Header';
+import Test from './components/test';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
         <Router>
-          <Switch>
-            <Route path="/signup" component={Signup} />
-            <Route path="/login" component={Login} />
-          </Switch>
+          <div>
+            <Header />
+            <Switch>
+              <Route path="/signup" component={Signup} />
+              <Route path="/login" component={Login} />
+              <Route path="/test" component={Test} />
+            </Switch>
+          </div>
         </Router>
       </div>
     );
