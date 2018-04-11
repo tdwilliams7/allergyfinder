@@ -1,8 +1,10 @@
+import './Profile.css';
 import React, { Component } from 'react';
 import { Flexrow, Flexcolumn } from '../../style/layout';
 import styled from 'styled-components';
 
-import './Profile.css';
+import { connect } from 'react-redux';
+import profilePic from '../../assets/icons8-user-50.png';
 
 class Profile extends Component {
   state = {
@@ -38,11 +40,19 @@ class Profile extends Component {
       <div>
         <ProfTop>
           <Flexcolumn size={3}>
-            <Img src="https://s3-us-west-2.amazonaws.com/allergyfinder/ProfPic.jpg" />
+            {this.props.pictureUrl ? (
+              <Img src={this.props.pictureUrl} />
+            ) : (
+              <Img src={profilePic} />
+            )}
           </Flexcolumn>
           <Flexcolumn size={6} />
           <Flexcolumn size={3}>
-            <Title>Troy Williams</Title>
+            {this.props.name ? (
+              <Title>{this.props.name}</Title>
+            ) : (
+              <Title>Add a Name</Title>
+            )}
             <Title>03/20/1990</Title>
           </Flexcolumn>
         </ProfTop>
@@ -81,9 +91,9 @@ class Profile extends Component {
             <button>+</button>
           </LabelButton>
         </LabelRow>
-        {this.state.contacts.map(contact => {
+        {this.state.contacts.map((contact, i) => {
           return (
-            <ContactRow>
+            <ContactRow key={i}>
               <AllergyName size={8}>
                 <h5>{contact.name}</h5>
               </AllergyName>
@@ -99,9 +109,9 @@ class Profile extends Component {
             <button>+</button>
           </LabelButton>
         </LabelRow>
-        {this.state.doctor.map(doc => {
+        {this.state.doctor.map((doc, i) => {
           return (
-            <ContactRow key={99}>
+            <ContactRow key={i}>
               <ContactName size={8}>
                 <h5>{doc.name}</h5>
                 <h5>{doc.phone}</h5>
@@ -182,4 +192,11 @@ const Img = styled.img`
   border-radius: 50%;
 `;
 
-export default Profile;
+const mapStateToProps = state => {
+  return {
+    name: state.userReducer.name,
+    pictureUrl: state.userReducer.pictureUrl
+  };
+};
+
+export default connect(mapStateToProps, null)(Profile);

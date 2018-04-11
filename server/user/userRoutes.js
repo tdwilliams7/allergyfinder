@@ -13,7 +13,7 @@ userRouter.post('/signup', (req, res) => {
   } else if (!password) {
     res.status(422).json({ err: 'please include a password' });
   } else {
-    const user = new User({ name, email, password });
+    const user = new User(req.body);
     user
       .save()
       .then(signedUp => {
@@ -42,7 +42,12 @@ userRouter.post('/login', (req, res) => {
             const token = jwt.sign(payload, config.secret, {
               expiresIn: '24h'
             });
-            res.send({ token, id: user._id });
+            res.send({
+              token,
+              id: user._id,
+              name: user.name,
+              pictureUrl: user.profileUrl
+            });
           } else {
             res.send(isMatch);
           }

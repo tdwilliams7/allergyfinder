@@ -13,6 +13,12 @@ class Login extends Component {
     signedIn: false
   };
 
+  componentWillReceiveProps(newProps) {
+    if (newProps.signedIn) {
+      this.props.history.push('/profile');
+    }
+  }
+
   inputChangeHandler = ({ target }) => {
     this.setState({
       [target.name]: target.value

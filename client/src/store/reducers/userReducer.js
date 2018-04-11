@@ -8,6 +8,8 @@ import {
 
 const initialState = {
   user: null,
+  pictureUrl: null,
+  name: null,
   creatingUser: false,
   userCreated: false,
   signingIn: false,
@@ -24,7 +26,9 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         signedIn: true,
         signingIn: false,
-        user: action.payload.id
+        user: action.payload.id,
+        name: action.payload.name,
+        pictureUrl: action.payload.pictureUrl
       };
     case CREATING_USER:
       return { ...state, creatingUser: true };

@@ -12,7 +12,6 @@ export const logIn = (email, password) => {
     axios
       .post('http://localhost:8080/users/login', { email, password })
       .then(({ data }) => {
-        console.log(data);
         window.localStorage.setItem('Authorization', data.token);
         dispatch({ type: SIGNED_IN, payload: data });
       })
