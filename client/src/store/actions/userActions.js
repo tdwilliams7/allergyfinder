@@ -13,11 +13,24 @@ const token = window.localStorage.getItem('Authorization');
 export const logIn = (email, password) => {
   return dispatch => {
     console.log(token);
+    if (token) {
+      dispatch({ type: SIGNING_IN });
+      axios
+        .post('http://localhost:8080/users/login', { token })
+        .then(({ data }) => {
+          dispatch({ type: SIGNED_IN, payload: data });
+        })
+        .catch(err => {
+          const errorCode = err.response.status;
+          if (errorCode === 422) {
+            dispatch({ type: LOGIN_ERROR });
+          }
+        });
+    }
     dispatch({ type: SIGNING_IN });
     axios
       .post('http://localhost:8080/users/login', { email, password })
       .then(({ data }) => {
-        console.log({ data });
         window.localStorage.setItem('Authorization', data.token);
         dispatch({ type: SIGNED_IN, payload: data });
       })

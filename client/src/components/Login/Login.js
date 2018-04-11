@@ -34,7 +34,7 @@ class Login extends Component {
     return (
       <div>
         <Title>Login Component</Title>
-        <form onSubmit={this.submitHandler}>
+        <form onSubmit={event => this.submitHandler(event)}>
           <Label htmlFor="email">EMAIL</Label>
           <Input
             name="email"

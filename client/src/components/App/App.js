@@ -10,6 +10,9 @@ import Test from '../test';
 import Home from '../Home/Home';
 import Profile from '../Profile/Profile';
 
+import { connect } from 'react-redux';
+import { logIn } from '../../store/actions/userActions';
+
 class App extends Component {
   render() {
     return (
@@ -31,4 +34,10 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    signedIn: state.userReducer.signedIn
+  };
+};
+
+export default connect(mapStateToProps, { logIn })(App);
