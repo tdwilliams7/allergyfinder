@@ -7,22 +7,45 @@ import './Profile.css';
 class Profile extends Component {
   state = {
     allergies: [
-      { name: 'Beef', severity: 1 },
-      { name: 'Pork', severity: 2 },
-      { name: 'Eggs', severity: 3 },
-      { name: 'water', severity: 0 }
+      { name: 'Beef', severity: 3 },
+      { name: 'Pork', severity: 3 },
+      { name: 'Eggs', severity: 1 },
+      { name: 'water', severity: 5 },
+      { name: 'Dairy', severity: 1 }
     ],
     contacts: [{ name: 'Mom' }, { name: 'Dad' }],
-    doctor: [{ name: 'DR. Doctorman', phone: '555-555-5555' }]
+    doctor: [
+      { name: 'DR. Doctorman', phone: '555-555-5555', type: 'Pediatrician' },
+      { name: 'Allergist', phone: '5587464734934', type: 'Allergist' }
+    ]
+  };
+
+  componentDidMount() {
+    this.sortAllergies();
+  }
+
+  sortAllergies = () => {
+    let allergies = this.state.allergies.slice(0);
+    allergies = allergies.sort((a, b) => {
+      return a.severity - b.severity;
+    });
+    this.setState({
+      allergies
+    });
   };
   render() {
     return (
       <div>
-        <Flexrow>
-          <Flexcolumn size={12}>
-            <Title>Welcome Troy</Title>
+        <ProfTop>
+          <Flexcolumn size={3}>
+            <Img src="https://s3-us-west-2.amazonaws.com/allergyfinder/ProfPic.jpg" />
           </Flexcolumn>
-        </Flexrow>
+          <Flexcolumn size={6} />
+          <Flexcolumn size={3}>
+            <Title>Troy Williams</Title>
+            <Title>03/20/1990</Title>
+          </Flexcolumn>
+        </ProfTop>
         <LabelRow>
           <Label size={6}>Allergies</Label>
           <Flexcolumn size={4} />
@@ -30,7 +53,7 @@ class Profile extends Component {
             <button>+</button>
           </LabelButton>
         </LabelRow>
-        {this.state.allergies.map(allergy => {
+        {this.state.allergies.map((allergy, i) => {
           let className = null;
           if (allergy.severity === 1) {
             className = 'severe';
@@ -42,11 +65,9 @@ class Profile extends Component {
             className = 'clear';
           }
           return (
-            <AllergyRow key={allergy.severity} className={className}>
+            <AllergyRow key={i} className={className}>
               <AllergyName size={8}>
-                <h5>
-                  {allergy.name} {allergy.severity}
-                </h5>
+                <h5>{allergy.name}</h5>
               </AllergyName>
               <Flexcolumn size={2} />
               <AllergyArrow size={2}>></AllergyArrow>
@@ -81,10 +102,11 @@ class Profile extends Component {
         {this.state.doctor.map(doc => {
           return (
             <ContactRow key={99}>
-              <AllergyName size={8}>
+              <ContactName size={8}>
                 <h5>{doc.name}</h5>
                 <h5>{doc.phone}</h5>
-              </AllergyName>
+                <h5>{doc.type}</h5>
+              </ContactName>
               <Flexcolumn size={2} />
               <AllergyArrow size={2}>></AllergyArrow>
             </ContactRow>
@@ -105,6 +127,7 @@ const AllergyRow = styled(Flexrow)`
   margin-right: 10vw;
   margin-top: 0.1%;
   align-items: center;
+  color: rgb(255, 244, 223);
 `;
 
 const ContactRow = styled(Flexrow)`
@@ -113,6 +136,11 @@ const ContactRow = styled(Flexrow)`
   margin-top: 0.1%;
   align-items: center;
   background-color: lightgrey;
+`;
+
+const ContactName = styled(Flexcolumn)`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const AllergyName = styled(Flexcolumn)`
@@ -141,6 +169,17 @@ const LabelRow = styled(Flexrow)`
   margin-left: 10vw;
   margin-right: 10vw;
   color: grey;
+`;
+
+const ProfTop = styled(Flexrow)`
+  display: flex;
+  justify-content: space-between;
+  margin-right: 10vw;
+  margin-left: 10vw;
+`;
+
+const Img = styled.img`
+  border-radius: 50%;
 `;
 
 export default Profile;

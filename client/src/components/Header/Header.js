@@ -17,7 +17,7 @@ class Header extends Component {
         <Flexcolumn size={3} />
         <Flexcolumn size={2} />
         <NavItem size={2}>
-          <StyledLink to="#">Profile</StyledLink>
+          <StyledLink to="/profile">Profile</StyledLink>
         </NavItem>
         <NavItem size={2}>
           {this.props.signedIn ? (

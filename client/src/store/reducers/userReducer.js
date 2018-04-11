@@ -7,7 +7,7 @@ import {
 } from '../actions/userActions';
 
 const initialState = {
-  authHeader: null,
+  user: null,
   creatingUser: false,
   userCreated: false,
   signingIn: false,
@@ -20,7 +20,12 @@ export const userReducer = (state = initialState, action) => {
     case SIGNING_IN:
       return { ...state, signingIn: true };
     case SIGNED_IN: // add jwt
-      return { ...state, signedIn: true, signingIn: false };
+      return {
+        ...state,
+        signedIn: true,
+        signingIn: false,
+        user: action.payload.id
+      };
     case CREATING_USER:
       return { ...state, creatingUser: true };
     case USER_CREATED:

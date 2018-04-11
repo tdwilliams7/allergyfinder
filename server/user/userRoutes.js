@@ -1,8 +1,10 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const userRouter = express.Router();
 const User = require('./userSchema');
+const config = require('../newconfig');
 
-userRouter.post('/signUp', (req, res) => {
+userRouter.post('/signup', (req, res) => {
   const { name, email, password } = req.body;
   if (!name) {
     res.status(422).json({ err: 'Please include a Name' });
@@ -24,6 +26,37 @@ userRouter.post('/signUp', (req, res) => {
 });
 
 userRouter.post('/login', (req, res) => {
+  const { email, password } = req.body;
+  User.findOne({ email })
+    .then(user => {
+      if (user) {
+        user.checkPassword(password, (err, isMatch) => {
+          if (err) {
+            res.send(err);
+          }
+          if (isMatch) {
+            const payload = {
+              email: user.email,
+              id: user._id
+            };
+            const token = jwt.sign(payload, config.secret, {
+              expiresIn: '24h'
+            });
+            res.send({ token, id: user._id });
+          } else {
+            res.send(isMatch);
+          }
+        });
+      } else {
+        res.send(`Cannot find user with email: ${email}`);
+      }
+    })
+    .catch(err => {
+      res.send(err);
+    });
+});
+
+userRouter.patch('/profile', (req, res) => {
   console.log(req.body);
 });
 

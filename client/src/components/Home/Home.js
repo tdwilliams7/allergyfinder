@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Flexrow, Flexcolumn } from '../../style/layout';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 class Home extends Component {
   render() {
@@ -43,7 +44,9 @@ class Home extends Component {
                   </Flexcolumn>
                 </Flexrow>
               </form>
-              <p>Don't have an account? sign up</p>
+              <p>
+                Don't have an account? <Link to="/signup">sign up</Link>
+              </p>
             </Flexrow>
           </Flexcolumn>
         </Flexrow>
