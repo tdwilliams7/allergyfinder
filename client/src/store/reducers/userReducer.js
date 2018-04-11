@@ -3,7 +3,9 @@ import {
   SIGNED_IN,
   CREATING_USER,
   USER_CREATED,
-  EMAIL_DUP
+  EMAIL_DUP,
+  LOGOUT,
+  LOGIN_ERROR
 } from '../actions/userActions';
 
 const initialState = {
@@ -14,7 +16,8 @@ const initialState = {
   userCreated: false,
   signingIn: false,
   signedIn: false,
-  dupUser: false
+  dupUser: false,
+  loginError: false
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -26,6 +29,7 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         signedIn: true,
         signingIn: false,
+        loginError: false,
         user: action.payload.id,
         name: action.payload.name,
         pictureUrl: action.payload.pictureUrl
@@ -41,6 +45,16 @@ export const userReducer = (state = initialState, action) => {
       };
     case EMAIL_DUP:
       return { ...state, dupUser: true, creatingUser: false };
+    case LOGOUT:
+      return {
+        ...state,
+        user: null,
+        name: null,
+        pictureUrl: null,
+        signedIn: false
+      };
+    case LOGIN_ERROR:
+      return { ...state, loginError: true, signingIn: false };
     default:
       return state;
   }

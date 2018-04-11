@@ -23,7 +23,16 @@ class Profile extends Component {
   };
 
   componentDidMount() {
+    if (!this.props.signedIn) {
+      this.props.history.push('/login');
+    }
     this.sortAllergies();
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (!newProps.signedIn) {
+      this.props.history.push('/login');
+    }
   }
 
   sortAllergies = () => {
@@ -195,7 +204,8 @@ const Img = styled.img`
 const mapStateToProps = state => {
   return {
     name: state.userReducer.name,
-    pictureUrl: state.userReducer.pictureUrl
+    pictureUrl: state.userReducer.pictureUrl,
+    signedIn: state.userReducer.signedIn
   };
 };
 

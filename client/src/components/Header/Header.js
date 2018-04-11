@@ -6,6 +6,7 @@ import { Flexrow, Flexcolumn } from '../../style/layout';
 
 // redux
 import { connect } from 'react-redux';
+import { logOut } from '../../store/actions/userActions';
 
 class Header extends Component {
   render() {
@@ -21,7 +22,7 @@ class Header extends Component {
         </NavItem>
         <NavItem size={2}>
           {this.props.signedIn ? (
-            'SignOut'
+            <NavItem onClick={() => this.props.logOut()}>Sign out</NavItem>
           ) : (
             <StyledLink to="/login">Login</StyledLink>
           )}
@@ -47,6 +48,7 @@ const Brand = styled(Flexcolumn)`
 const NavItem = styled(Flexcolumn)`
   text-decoration: none;
   color: rgb(243, 211, 147);
+  cursor: pointer;
 `;
 
 const StyledLink = styled(Link)`
@@ -60,4 +62,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, null)(Header);
+export default connect(mapStateToProps, { logOut })(Header);

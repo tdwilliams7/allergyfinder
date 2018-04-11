@@ -50,6 +50,9 @@ class Login extends Component {
           />
           <button>log in</button>
         </form>
+        {this.props.loginError ? (
+          <h4>Email and/or password incorrect.</h4>
+        ) : null}
       </div>
     );
   }
@@ -75,7 +78,8 @@ const Label = styled.label`
 const mapStateToProps = state => {
   return {
     signingIn: state.userReducer.signingIn,
-    signedIn: state.userReducer.signedIn
+    signedIn: state.userReducer.signedIn,
+    loginError: state.userReducer.loginError
   };
 };
 

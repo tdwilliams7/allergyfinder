@@ -5,19 +5,35 @@ export const SIGNING_IN = 'SIGNING_IN';
 export const CREATING_USER = 'CREATING_USER';
 export const USER_CREATED = 'USER_CREATED';
 export const EMAIL_DUP = 'EMAIL_DUP';
+export const LOGOUT = 'LOGOUT';
+export const LOGIN_ERROR = 'LOGIN_ERROR';
+
+const token = window.localStorage.getItem('Authorization');
 
 export const logIn = (email, password) => {
   return dispatch => {
+    console.log(token);
     dispatch({ type: SIGNING_IN });
     axios
       .post('http://localhost:8080/users/login', { email, password })
       .then(({ data }) => {
+        console.log({ data });
         window.localStorage.setItem('Authorization', data.token);
         dispatch({ type: SIGNED_IN, payload: data });
       })
       .catch(err => {
-        console.log(err);
+        const errorCode = err.response.status;
+        if (errorCode === 422) {
+          dispatch({ type: LOGIN_ERROR });
+        }
       });
+  };
+};
+
+export const logOut = () => {
+  return dispatch => {
+    window.localStorage.removeItem('Authorization');
+    dispatch({ type: LOGOUT });
   };
 };
 

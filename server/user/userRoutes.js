@@ -53,7 +53,9 @@ userRouter.post('/login', (req, res) => {
           }
         });
       } else {
-        res.send(`Cannot find user with email: ${email}`);
+        res
+          .status(422)
+          .json({ error: `Cannot find user with email: ${email}` });
       }
     })
     .catch(err => {
