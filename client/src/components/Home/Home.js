@@ -1,10 +1,25 @@
 import React, { Component } from 'react';
 import { Flexrow, Flexcolumn } from '../../style/layout';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+
+import { connect } from 'react-redux';
+import { logIn } from '../../store/actions/userActions';
 
 class Home extends Component {
+  componentDidMount() {
+    if (!this.props.signedIn) {
+      this.props.logIn();
+    }
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.signedIn) {
+      this.props.history.push('/profile');
+    }
+  }
   render() {
+    console.log(this.props.signedIn);
     return (
       <div>
         <Flexrow>
@@ -61,5 +76,10 @@ const MainText = styled.div`
   flex-flow: row wrap;
   justify-content: center;
 `;
+const mapStateToProps = state => {
+  return {
+    signedIn: state.userReducer.signedIn
+  };
+};
 
-export default Home;
+export default withRouter(connect(mapStateToProps, { logIn })(Home));

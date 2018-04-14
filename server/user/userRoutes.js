@@ -36,7 +36,8 @@ userRouter.post('/login', (req, res) => {
               token,
               id: user._id,
               name: user.name,
-              pictureUrl: user.profileUrl
+              pictureUrl: user.profileUrl,
+              dob: user.dob
             });
           } else {
             res
@@ -53,9 +54,7 @@ userRouter.post('/login', (req, res) => {
       .then(user => {
         if (user) {
           user.checkPassword(password, (err, isMatch) => {
-            if (err) {
-              res.send(err);
-            }
+            if (err) res.send(err);
             if (isMatch) {
               const payload = {
                 email: user.email,
@@ -68,7 +67,8 @@ userRouter.post('/login', (req, res) => {
                 token,
                 id: user._id,
                 name: user.name,
-                pictureUrl: user.profileUrl
+                pictureUrl: user.profileUrl,
+                dob: user.dob
               });
             } else {
               res.send(isMatch);
@@ -86,8 +86,25 @@ userRouter.post('/login', (req, res) => {
   }
 });
 
-userRouter.patch('/profile', (req, res) => {
-  console.log(req.body);
+userRouter.patch('/profile/update', (req, res) => {
+  const { name, dob } = req.body.updatedInfo;
+  console.log(dob);
+  jwt.verify(req.body.token, config.secret, (err, decoded) => {
+    if (err) res.send({ err });
+    const _id = decoded.id;
+    User.findOneAndUpdate(_id, { name, dob }, { new: true })
+      .then(user => {
+        res.status(200).json({
+          id: user._id,
+          name: user.name,
+          pictureUrl: user.profileUrl,
+          dob: user.dob
+        });
+      })
+      .catch(err => {
+        console.log({ err });
+      });
+  });
 });
 
 module.exports = userRouter;

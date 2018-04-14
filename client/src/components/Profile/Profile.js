@@ -2,9 +2,11 @@ import './Profile.css';
 import React, { Component } from 'react';
 import { Flexrow, Flexcolumn } from '../../style/layout';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import profilePic from '../../assets/icons8-user-50.png';
 
 import { connect } from 'react-redux';
-import profilePic from '../../assets/icons8-user-50.png';
+import { updateUser } from '../../store/actions/userActions';
 
 class Profile extends Component {
   state = {
@@ -19,7 +21,12 @@ class Profile extends Component {
     doctor: [
       { name: 'DR. Doctorman', phone: '555-555-5555', type: 'Pediatrician' },
       { name: 'Allergist', phone: '5587464734934', type: 'Allergist' }
-    ]
+    ],
+    editing: false,
+    profile: {
+      dob: '',
+      name: ''
+    }
   };
 
   componentDidMount() {
@@ -27,6 +34,12 @@ class Profile extends Component {
       this.props.history.push('/login');
     }
     this.sortAllergies();
+    this.setState({
+      profile: {
+        name: this.props.name,
+        dob: this.props.dob
+      }
+    });
   }
 
   componentWillReceiveProps(newProps) {
@@ -44,32 +57,110 @@ class Profile extends Component {
       allergies
     });
   };
+
+  inputChangeHandler = ({ target }) => {
+    this.setState({
+      profile: {
+        ...this.state.profile,
+        [target.name]: target.value
+      }
+    });
+  };
+
+  updateProfileInfo = () => {
+    this.props.updateUser(this.state.profile);
+    this.setState({
+      editing: false
+    });
+  };
+
+  editProfileHandler = () => {
+    this.setState({
+      editing: true
+    });
+  };
+
   render() {
     return (
       <div>
-        <ProfTop>
-          <Flexcolumn size={3}>
-            {this.props.pictureUrl ? (
-              <Img src={this.props.pictureUrl} />
-            ) : (
-              <Img src={profilePic} />
-            )}
-          </Flexcolumn>
-          <Flexcolumn size={6} />
-          <Flexcolumn size={3}>
-            {this.props.name ? (
-              <Title>{this.props.name}</Title>
-            ) : (
-              <Title>Add a Name</Title>
-            )}
-            <Title>03/20/1990</Title>
-          </Flexcolumn>
-        </ProfTop>
+        {this.state.editing ? (
+          <ProfTop>
+            <Flexcolumn size={3}>
+              {this.props.pictureUrl ? (
+                <Img src={this.props.pictureUrl} />
+              ) : (
+                <Img src={profilePic} />
+              )}
+            </Flexcolumn>
+            <Flexcolumn size={6} />
+            <Flexcolumn size={3}>
+              {this.props.name ? (
+                <input
+                  onChange={this.inputChangeHandler}
+                  name="name"
+                  value={this.state.profile.name}
+                  // placeholder={this.props.name}
+                />
+              ) : (
+                <input
+                  onChange={this.inputChangeHandler}
+                  name="name"
+                  value={this.state.profile.name}
+                  placeholder="Add your name"
+                />
+              )}
+              {this.props.dob ? (
+                <input
+                  onChange={this.inputChangeHandler}
+                  name="dob"
+                  value={this.state.profile.dob}
+                  placeholder={this.props.dob}
+                />
+              ) : (
+                <input
+                  onChange={this.inputChangeHandler}
+                  name="dob"
+                  value={this.state.profile.dob}
+                  placeholder="MM/DD/YYYY"
+                />
+              )}
+              <button onClick={() => this.updateProfileInfo()}>Submit</button>
+            </Flexcolumn>
+          </ProfTop>
+        ) : (
+          <ProfTop>
+            <Flexcolumn size={3}>
+              {this.props.pictureUrl ? (
+                <Img src={this.props.pictureUrl} />
+              ) : (
+                <Img src={profilePic} />
+              )}
+            </Flexcolumn>
+            <Flexcolumn size={6} />
+            <Flexcolumn size={3}>
+              {this.props.name ? (
+                <Title>{this.props.name}</Title>
+              ) : (
+                <Title>Add a Name</Title>
+              )}
+              {this.props.dob ? (
+                <Title>{this.props.dob}</Title>
+              ) : (
+                <Title>Add a date of birth</Title>
+              )}
+              <button onClick={() => this.editProfileHandler()}>
+                edit profile
+              </button>
+            </Flexcolumn>
+          </ProfTop>
+        )}
         <LabelRow>
           <Label size={6}>Allergies</Label>
           <Flexcolumn size={4} />
           <LabelButton size={2}>
-            <button>+</button>
+            <Link to="/allergy/new">
+              <button>+</button>
+            </Link>
           </LabelButton>
         </LabelRow>
         {this.state.allergies.map((allergy, i) => {
@@ -205,8 +296,9 @@ const mapStateToProps = state => {
   return {
     name: state.userReducer.name,
     pictureUrl: state.userReducer.pictureUrl,
-    signedIn: state.userReducer.signedIn
+    signedIn: state.userReducer.signedIn,
+    dob: state.userReducer.dob
   };
 };
 
-export default connect(mapStateToProps, null)(Profile);
+export default connect(mapStateToProps, { updateUser })(Profile);

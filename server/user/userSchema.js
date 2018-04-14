@@ -7,7 +7,8 @@ const UserSchema = new Schema({
   name: { type: String, required: true },
   password: { type: String, required: true, index: true },
   email: { type: String, required: true, index: true, unique: true },
-  profileUrl: { type: String, required: false }
+  profileUrl: { type: String, required: false },
+  dob: { type: String, required: false }
 });
 
 UserSchema.pre('save', function(next) {

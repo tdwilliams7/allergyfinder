@@ -5,19 +5,23 @@ import {
   USER_CREATED,
   EMAIL_DUP,
   LOGOUT,
-  LOGIN_ERROR
+  LOGIN_ERROR,
+  UPDATING_USER,
+  USER_UPDATED
 } from '../actions/userActions';
 
 const initialState = {
-  user: null,
-  pictureUrl: null,
-  name: null,
+  user: '',
+  pictureUrl: '',
+  name: '',
+  dob: '',
   creatingUser: false,
   userCreated: false,
   signingIn: false,
   signedIn: false,
   dupUser: false,
-  loginError: false
+  loginError: false,
+  updatingUser: false
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -32,7 +36,8 @@ export const userReducer = (state = initialState, action) => {
         loginError: false,
         user: action.payload.id,
         name: action.payload.name,
-        pictureUrl: action.payload.pictureUrl
+        pictureUrl: action.payload.pictureUrl,
+        dob: action.payload.dob
       };
     case CREATING_USER:
       return { ...state, creatingUser: true };
@@ -48,13 +53,28 @@ export const userReducer = (state = initialState, action) => {
     case LOGOUT:
       return {
         ...state,
-        user: null,
-        name: null,
-        pictureUrl: null,
+        user: '',
+        name: '',
+        pictureUrl: '',
+        dob: '',
         signedIn: false
       };
     case LOGIN_ERROR:
       return { ...state, loginError: true, signingIn: false };
+    case UPDATING_USER:
+      return {
+        ...state,
+        updatingUser: true
+      };
+    case USER_UPDATED:
+      return {
+        ...state,
+        updatingUser: false,
+        user: action.payload.id,
+        name: action.payload.name,
+        pictureUrl: action.payload.pictureUrl,
+        dob: action.payload.dob
+      };
     default:
       return state;
   }
