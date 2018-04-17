@@ -2,6 +2,8 @@
 
 #### user profiles of allergies, food allergies or preferences.
 
+[hosted on heroku](https://dry-taiga-95955.herokuapp.com)
+
 ##### Frontend
 
 * SPA made with CRA, React-router v4, Axios for api calls, Redux to handle state and user logged in status, Mostly styled components with css sprinkled in where needed. Authorization token stored in localStorage.

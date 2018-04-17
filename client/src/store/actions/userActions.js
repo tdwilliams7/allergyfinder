@@ -18,7 +18,7 @@ export const logIn = (email, password) => {
     if (token && !email) {
       dispatch({ type: SIGNING_IN });
       axios
-        .post(`/users/login`, { token })
+        .post(`${backendURL}/users/login`, { token })
         .then(({ data }) => {
           dispatch({ type: SIGNED_IN, payload: data });
         })
@@ -31,7 +31,7 @@ export const logIn = (email, password) => {
     } else {
       dispatch({ type: SIGNING_IN });
       axios
-        .post(`/users/login`, { email, password })
+        .post(`${backendURL}/users/login`, { email, password })
         .then(({ data }) => {
           window.localStorage.setItem('Authorization', data.token);
           dispatch({ type: SIGNED_IN, payload: data });
@@ -58,7 +58,7 @@ export const newUser = (name, email, password) => {
   return dispatch => {
     dispatch({ type: CREATING_USER });
     axios
-      .post(`/users/signUp`, { name, email, password })
+      .post(`${backendURL}/users/signUp`, { name, email, password })
       .then(({ data }) => {
         dispatch({ type: USER_CREATED });
       })
@@ -75,7 +75,7 @@ export const updateUser = updatedInfo => {
   return dispatch => {
     dispatch({ type: UPDATING_USER });
     axios
-      .patch(`/users/profile/update`, {
+      .patch(`${backendURL}/users/profile/update`, {
         token,
         updatedInfo
       })
@@ -92,7 +92,7 @@ export const addAllergyToUser = allergy => {
   return dispatch => {
     dispatch({ type: UPDATING_USER });
     axios
-      .patch(`/users/profile/allergy`, {
+      .patch(`${backendURL}/users/profile/allergy`, {
         token,
         allergy
       })
@@ -109,7 +109,7 @@ export const addDoctorToUser = doctor => {
   return dispatch => {
     dispatch({ type: UPDATING_USER });
     axios
-      .patch(`/users/profile/doctor`, { token, doctor })
+      .patch(`${backendURL}/users/profile/doctor`, { token, doctor })
       .then(({ data }) => {
         dispatch({ type: USER_UPDATED, payload: data });
       })
@@ -121,7 +121,7 @@ export const addContactToUser = contact => {
   return dispatch => {
     dispatch({ type: UPDATING_USER });
     axios
-      .patch(`/users/profile/contact`, { token, contact })
+      .patch(`${backendURL}/users/profile/contact`, { token, contact })
       .then(({ data }) => {
         dispatch({ type: USER_UPDATED, payload: data });
       })

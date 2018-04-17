@@ -8,7 +8,7 @@ export const getAllergies = () => {
   return dispatch => {
     dispatch({ type: GET_ALLERGIES });
     axios
-      .get(`/allergy`)
+      .get(`${backendURL}/allergy`)
       .then(({ data }) => {
         dispatch({ type: GOT_ALLERGIES, payload: data });
       })
