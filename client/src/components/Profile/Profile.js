@@ -39,7 +39,7 @@ class Profile extends Component {
 
   componentWillReceiveProps(newProps) {
     if (!newProps.signedIn) {
-      this.props.history.push('/home');
+      this.props.history.push('/');
     }
   }
 

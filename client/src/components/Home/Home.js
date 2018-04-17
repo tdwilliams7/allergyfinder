@@ -30,7 +30,8 @@ class Home extends Component {
     });
   };
 
-  logInHandler = () => {
+  logInHandler = event => {
+    event.preventDefault();
     this.props.logIn(this.state);
   };
 
@@ -46,8 +47,8 @@ class Home extends Component {
           </Flexcolumn>
           <Flexcolumn size={1} />
           <Flexcolumn size={3}>
-            <Flexrow>
-              <form onSubmit={() => this.logInHandler()}>
+            {/* <Flexrow>
+              <form onSubmit={this.logInHandler}>
                 <Flexrow>
                   <Flexcolumn size={12}>
                     <label>Email</label>
@@ -85,6 +86,14 @@ class Home extends Component {
               <p>
                 Don't have an account? <Link to="/signup">sign up</Link>
               </p>
+            </Flexrow> */}
+            <Flexrow>
+              <Flexcolumn size={12}>Add a log in here</Flexcolumn>
+              <Flexcolumn size={12}>
+                <p>
+                  Don't have an account? <Link to="/signup">sign up</Link>
+                </p>
+              </Flexcolumn>
             </Flexrow>
           </Flexcolumn>
         </Flexrow>
