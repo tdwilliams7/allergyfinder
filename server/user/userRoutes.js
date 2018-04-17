@@ -2,6 +2,8 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const userRouter = express.Router();
 const User = require('./userSchema');
+const Allergy = require('../allergy/allergySchema');
+const Contact = require('../contact/contactSchema');
 const config = require('../newconfig');
 
 userRouter.post('/signup', (req, res) => {
@@ -37,7 +39,10 @@ userRouter.post('/login', (req, res) => {
               id: user._id,
               name: user.name,
               pictureUrl: user.profileUrl,
-              dob: user.dob
+              dob: user.dob,
+              allergies: user.allergies,
+              contacts: user.contacts,
+              doctors: user.doctors
             });
           } else {
             res
@@ -46,6 +51,7 @@ userRouter.post('/login', (req, res) => {
           }
         })
         .catch(err => {
+          console.log(err);
           res.send(err);
         });
     });
@@ -60,15 +66,16 @@ userRouter.post('/login', (req, res) => {
                 email: user.email,
                 id: user._id
               };
-              const token = jwt.sign(payload, config.secret, {
-                expiresIn: '24h'
-              });
+              const token = jwt.sign(payload, config.secret);
               res.send({
                 token,
                 id: user._id,
                 name: user.name,
                 pictureUrl: user.profileUrl,
-                dob: user.dob
+                dob: user.dob,
+                allergies: user.allergies,
+                contacts: user.contacts,
+                doctors: user.doctors
               });
             } else {
               res.send(isMatch);
@@ -81,6 +88,7 @@ userRouter.post('/login', (req, res) => {
         }
       })
       .catch(err => {
+        console.log(err);
         res.send(err);
       });
   }
@@ -88,21 +96,67 @@ userRouter.post('/login', (req, res) => {
 
 userRouter.patch('/profile/update', (req, res) => {
   const { name, dob } = req.body.updatedInfo;
-  console.log(dob);
   jwt.verify(req.body.token, config.secret, (err, decoded) => {
     if (err) res.send({ err });
     const _id = decoded.id;
     User.findOneAndUpdate(_id, { name, dob }, { new: true })
       .then(user => {
-        res.status(200).json({
-          id: user._id,
-          name: user.name,
-          pictureUrl: user.profileUrl,
-          dob: user.dob
-        });
+        res.status(200).json(user);
       })
       .catch(err => {
         console.log({ err });
+      });
+  });
+});
+
+userRouter.patch('/profile/allergy', (req, res) => {
+  const { allergy } = req.body;
+  jwt.verify(req.body.token, config.secret, (err, decoded) => {
+    // console.log(new Allergy(allergy));
+    User.findOneAndUpdate(
+      { _id: decoded.id },
+      { $push: { allergies: new Allergy(allergy) } },
+      { new: true }
+    )
+      .then(user => {
+        res.status(200).json(user);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+});
+
+userRouter.patch('/profile/contact', (req, res) => {
+  const { contact } = req.body;
+  jwt.verify(req.body.token, config.secret, (err, decoded) => {
+    User.findOneAndUpdate(
+      { _id: decoded.id },
+      { $push: { contacts: new Contact(contact) } },
+      { new: true }
+    )
+      .then(user => {
+        res.status(200).json(user);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+});
+
+userRouter.patch('/profile/doctor', (req, res) => {
+  const { doctor } = req.body;
+  jwt.verify(req.body.token, config.secret, (err, decoded) => {
+    User.findOneAndUpdate(
+      { _id: decoded.id },
+      { $push: { doctors: doctor } },
+      { new: true }
+    )
+      .then(user => {
+        res.send(user);
+      })
+      .catch(err => {
+        console.log(err);
       });
   });
 });

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import PropTypes from 'prop-types';
+
 import './App.css';
 
 // Components
@@ -11,6 +11,8 @@ import Test from '../test';
 import Home from '../Home/Home';
 import Profile from '../Profile/Profile';
 import AllergyForm from '../AllergyForm/AllergyForm';
+import DoctorForm from '../DoctorForm/DoctorForm';
+import ContactForm from '../ContactForm/ContactForm';
 
 import { connect } from 'react-redux';
 import { logIn } from '../../store/actions/userActions';
@@ -28,6 +30,8 @@ class App extends Component {
               <Route path="/profile" component={Profile} />
               <Route path="/allergy/new" component={AllergyForm} />
               <Route path="/test" component={Test} />
+              <Route path="/doctor/new" component={DoctorForm} />
+              <Route path="/contact/new" component={ContactForm} />
               <Route exact path="/" component={Home} />
             </Switch>
           </div>

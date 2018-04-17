@@ -7,6 +7,11 @@ import { connect } from 'react-redux';
 import { logIn } from '../../store/actions/userActions';
 
 class Home extends Component {
+  state = {
+    email: '',
+    password: ''
+  };
+
   componentDidMount() {
     if (!this.props.signedIn) {
       this.props.logIn();
@@ -18,8 +23,18 @@ class Home extends Component {
       this.props.history.push('/profile');
     }
   }
+
+  inputChangeHandler = ({ target }) => {
+    this.setState({
+      [target.name]: target.value
+    });
+  };
+
+  logInHandler = () => {
+    this.props.logIn(this.state);
+  };
+
   render() {
-    console.log(this.props.signedIn);
     return (
       <div>
         <Flexrow>
@@ -32,7 +47,7 @@ class Home extends Component {
           <Flexcolumn size={1} />
           <Flexcolumn size={3}>
             <Flexrow>
-              <form>
+              <form onSubmit={() => this.logInHandler()}>
                 <Flexrow>
                   <Flexcolumn size={12}>
                     <label>Email</label>
@@ -40,7 +55,11 @@ class Home extends Component {
                 </Flexrow>
                 <Flexrow>
                   <Flexcolumn size={12}>
-                    <input />
+                    <input
+                      name="email"
+                      value={this.state.email}
+                      onChange={this.inputChangeHandler}
+                    />
                   </Flexcolumn>
                 </Flexrow>
                 <Flexrow>
@@ -50,7 +69,11 @@ class Home extends Component {
                 </Flexrow>
                 <Flexrow>
                   <Flexcolumn size={12}>
-                    <input />
+                    <input
+                      name="password"
+                      value={this.state.password}
+                      onChange={this.inputChangeHandler}
+                    />
                   </Flexcolumn>
                 </Flexrow>
                 <Flexrow>

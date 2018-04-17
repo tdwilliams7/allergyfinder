@@ -7,16 +7,11 @@ import profilePic from '../../assets/icons8-user-50.png';
 
 import { connect } from 'react-redux';
 import { updateUser } from '../../store/actions/userActions';
+import { getAllergies } from '../../store/actions/allergyActions';
 
 class Profile extends Component {
   state = {
-    allergies: [
-      { name: 'Beef', severity: 3 },
-      { name: 'Pork', severity: 3 },
-      { name: 'Eggs', severity: 1 },
-      { name: 'water', severity: 5 },
-      { name: 'Dairy', severity: 1 }
-    ],
+    allergies: [],
     contacts: [{ name: 'Mom' }, { name: 'Dad' }],
     doctor: [
       { name: 'DR. Doctorman', phone: '555-555-5555', type: 'Pediatrician' },
@@ -33,8 +28,8 @@ class Profile extends Component {
     if (!this.props.signedIn) {
       this.props.history.push('/login');
     }
-    this.sortAllergies();
     this.setState({
+      ...this.state,
       profile: {
         name: this.props.name,
         dob: this.props.dob
@@ -44,19 +39,9 @@ class Profile extends Component {
 
   componentWillReceiveProps(newProps) {
     if (!newProps.signedIn) {
-      this.props.history.push('/login');
+      this.props.history.push('/home');
     }
   }
-
-  sortAllergies = () => {
-    let allergies = this.state.allergies.slice(0);
-    allergies = allergies.sort((a, b) => {
-      return a.severity - b.severity;
-    });
-    this.setState({
-      allergies
-    });
-  };
 
   inputChangeHandler = ({ target }) => {
     this.setState({
@@ -163,37 +148,43 @@ class Profile extends Component {
             </Link>
           </LabelButton>
         </LabelRow>
-        {this.state.allergies.map((allergy, i) => {
-          let className = null;
-          if (allergy.severity === 1) {
-            className = 'severe';
-          } else if (allergy.severity === 2) {
-            className = 'moderate';
-          } else if (allergy.severity === 3) {
-            className = 'avoid';
-          } else {
-            className = 'clear';
-          }
-          return (
-            <AllergyRow key={i} className={className}>
-              <AllergyName size={8}>
-                <h5>{allergy.name}</h5>
-              </AllergyName>
-              <Flexcolumn size={2} />
-              <AllergyArrow size={2}>></AllergyArrow>
-            </AllergyRow>
-          );
-        })}
+        {this.props.signedIn ? (
+          this.props.allergies.map((allergy, i) => {
+            let className = null;
+            if (allergy.severity === 1) {
+              className = 'severe';
+            } else if (allergy.severity === 2) {
+              className = 'moderate';
+            } else if (allergy.severity === 3) {
+              className = 'avoid';
+            } else {
+              className = 'clear';
+            }
+            return (
+              <AllergyRow key={i} className={className}>
+                <AllergyName size={8}>
+                  <h5>{allergy.name}</h5>
+                </AllergyName>
+                <Flexcolumn size={2} />
+                <AllergyArrow size={2}>></AllergyArrow>
+              </AllergyRow>
+            );
+          })
+        ) : (
+          <h1>Loading...</h1>
+        )}
         <LabelRow>
           <Label size={6}>Emergency Contacts</Label>
           <Flexcolumn size={4} />
           <LabelButton size={2}>
-            <button>+</button>
+            <Link to="/contact/new">
+              <button>+</button>
+            </Link>
           </LabelButton>
         </LabelRow>
-        {this.state.contacts.map((contact, i) => {
+        {this.props.contacts.map(contact => {
           return (
-            <ContactRow key={i}>
+            <ContactRow key={contact._id}>
               <AllergyName size={8}>
                 <h5>{contact.name}</h5>
               </AllergyName>
@@ -206,22 +197,26 @@ class Profile extends Component {
           <Label size={6}>Primary Care Doctor</Label>
           <Flexcolumn size={4} />
           <LabelButton size={2}>
-            <button>+</button>
+            <Link to="/doctor/new">
+              <button>+</button>
+            </Link>
           </LabelButton>
         </LabelRow>
-        {this.state.doctor.map((doc, i) => {
-          return (
-            <ContactRow key={i}>
-              <ContactName size={8}>
-                <h5>{doc.name}</h5>
-                <h5>{doc.phone}</h5>
-                <h5>{doc.type}</h5>
-              </ContactName>
-              <Flexcolumn size={2} />
-              <AllergyArrow size={2}>></AllergyArrow>
-            </ContactRow>
-          );
-        })}
+        <div>
+          {this.props.doctors.map(doc => {
+            return (
+              <ContactRow key={doc._id}>
+                <ContactName size={8}>
+                  <h5>{doc.name}</h5>
+                  <h5>{doc.phone}</h5>
+                  <h5>{doc.specialty}</h5>
+                </ContactName>
+                <Flexcolumn size={2} />
+                <AllergyArrow size={2}>></AllergyArrow>
+              </ContactRow>
+            );
+          })}
+        </div>
       </div>
     );
   }
@@ -297,8 +292,11 @@ const mapStateToProps = state => {
     name: state.userReducer.name,
     pictureUrl: state.userReducer.pictureUrl,
     signedIn: state.userReducer.signedIn,
-    dob: state.userReducer.dob
+    dob: state.userReducer.dob,
+    allergies: state.userReducer.allergies,
+    contacts: state.userReducer.contacts,
+    doctors: state.userReducer.doctors
   };
 };
 
-export default connect(mapStateToProps, { updateUser })(Profile);
+export default connect(mapStateToProps, { updateUser, getAllergies })(Profile);

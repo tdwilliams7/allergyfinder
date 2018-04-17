@@ -15,6 +15,9 @@ const initialState = {
   pictureUrl: '',
   name: '',
   dob: '',
+  allergies: [],
+  contacts: [],
+  doctors: [],
   creatingUser: false,
   userCreated: false,
   signingIn: false,
@@ -28,7 +31,7 @@ export const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case SIGNING_IN:
       return { ...state, signingIn: true };
-    case SIGNED_IN: // add jwt
+    case SIGNED_IN:
       return {
         ...state,
         signedIn: true,
@@ -37,7 +40,10 @@ export const userReducer = (state = initialState, action) => {
         user: action.payload.id,
         name: action.payload.name,
         pictureUrl: action.payload.pictureUrl,
-        dob: action.payload.dob
+        dob: action.payload.dob,
+        allergies: action.payload.allergies,
+        contacts: action.payload.contacts,
+        doctors: action.payload.doctors
       };
     case CREATING_USER:
       return { ...state, creatingUser: true };
@@ -57,6 +63,8 @@ export const userReducer = (state = initialState, action) => {
         name: '',
         pictureUrl: '',
         dob: '',
+        allergies: [],
+        contacts: [],
         signedIn: false
       };
     case LOGIN_ERROR:
@@ -73,7 +81,10 @@ export const userReducer = (state = initialState, action) => {
         user: action.payload.id,
         name: action.payload.name,
         pictureUrl: action.payload.pictureUrl,
-        dob: action.payload.dob
+        dob: action.payload.dob,
+        allergies: action.payload.allergies,
+        contacts: action.payload.contacts,
+        doctors: action.payload.doctors
       };
     default:
       return state;
