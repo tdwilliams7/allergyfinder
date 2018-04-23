@@ -2,9 +2,8 @@
 
 #### user profiles of allergies, food allergies or preferences.
 
-[hosted on heroku](https://dry-taiga-95955.herokuapp.com)
+[hosted on heroku](https://dry-taiga-95955.herokuapp.com)\
 [Mobile Project](https://github.com/tdwilliams7/allergies-mobile)\
-Hello
 
 ##### Frontend
 
