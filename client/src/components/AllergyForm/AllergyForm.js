@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getAllergies } from '../../store/actions/allergyActions';
 import { addAllergyToUser } from '../../store/actions/userActions';
+import { getReactions } from '../../store/actions/reactionActions';
 
 class AllergyForm extends Component {
   state = {
@@ -21,6 +22,7 @@ class AllergyForm extends Component {
       this.props.history.push('/login');
     }
     this.props.getAllergies();
+    this.props.getReactions();
   }
 
   componentWillReceiveProps(newProps) {
@@ -45,6 +47,7 @@ class AllergyForm extends Component {
       <div>
         <h1>Name</h1>
         <select name="name" required onChange={this.inputChangeHandler}>
+          <option>Select name</option>
           {this.props.allergies.map((allergy, i) => {
             return (
               <option key={i} value={allergy.name}>
@@ -55,16 +58,21 @@ class AllergyForm extends Component {
         </select>
         <h1>Severity</h1>
         <Select name="severity" onChange={this.inputChangeHandler}>
+          <option>Select Severity Level</option>
           <option value="1">1 high</option>
           <option value="2">2 mild</option>
           <option value="3">3 low</option>
         </Select>
         <h1>Reaction</h1>
         <Select name="reaction" onChange={this.inputChangeHandler}>
-          <option value="food or medicine">
-            find a list of common reactions
-          </option>
-          <option value="3">3 high</option>
+          <option>Select Main Reaction</option>
+          {this.props.reactions.map(reaction => {
+            return (
+              <option key={reaction._id} value={reaction.name}>
+                {reaction.name}
+              </option>
+            );
+          })}
         </Select>
         <h1>Treatment</h1>
         <TextArea
@@ -97,10 +105,13 @@ const TextArea = styled.textarea`
 const mapStateToProps = state => {
   return {
     allergies: state.allergyReducer.allergies,
+    reactions: state.reactionReducer.reactions,
     signedIn: state.userReducer.signedIn
   };
 };
 
 export default withRouter(
-  connect(mapStateToProps, { getAllergies, addAllergyToUser })(AllergyForm)
+  connect(mapStateToProps, { getAllergies, addAllergyToUser, getReactions })(
+    AllergyForm
+  )
 );

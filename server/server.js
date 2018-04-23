@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const userRouter = require('./user/userRoutes');
 const allergyRouter = require('./allergy/allergyRoutes');
+const reactionRouter = require('./reactions/reactionRoutes');
 const cors = require('cors');
 const path = require('path');
 
@@ -14,6 +15,7 @@ server.use(express.json());
 server.use(cors());
 server.use('/users', userRouter);
 server.use('/allergy', allergyRouter);
+server.use('/reaction', reactionRouter);
 
 server.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname + '/../client/build/index.html'));

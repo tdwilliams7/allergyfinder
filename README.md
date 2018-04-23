@@ -3,6 +3,7 @@
 #### user profiles of allergies, food allergies or preferences.
 
 [hosted on heroku](https://dry-taiga-95955.herokuapp.com)
+[Mobile Project](https://github.com/tdwilliams7/allergies-mobile)
 
 ##### Frontend
 
@@ -44,3 +45,8 @@
 
 * POST: `/allergy/new` - add a new allergy name to allergy collection.
   `{ "name": required }`
+
+* GET: `/reaction` - returns an array of all of the allergy names;
+
+* POST: `/reaction/new` - adds a new reaction name to collection and returns that reaction.
+  `{ "name": required}`

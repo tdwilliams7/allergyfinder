@@ -80,7 +80,7 @@ export const userReducer = (state = initialState, action) => {
         updatingUser: false,
         user: action.payload.id,
         name: action.payload.name,
-        pictureUrl: action.payload.pictureUrl,
+        pictureUrl: action.payload.profileUrl,
         dob: action.payload.dob,
         allergies: action.payload.allergies,
         contacts: action.payload.contacts,

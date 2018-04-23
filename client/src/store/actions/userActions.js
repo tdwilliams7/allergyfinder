@@ -15,7 +15,9 @@ const backendURL = 'http://localhost:8080';
 
 export const logIn = (email, password) => {
   return dispatch => {
-    if (token && !email) {
+    if (token === null && !email) {
+      return;
+    } else if (token && !email) {
       dispatch({ type: SIGNING_IN });
       axios
         .post(`${backendURL}/users/login`, { token })

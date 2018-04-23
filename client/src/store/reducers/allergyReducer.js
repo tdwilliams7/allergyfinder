@@ -17,6 +17,7 @@ export const allergyReducer = (state = initialState, action) => {
       return {
         ...state,
         receivedAllergies: true,
+        gettingAllergies: false,
         allergies: action.payload
       };
     default:

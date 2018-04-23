@@ -7,7 +7,6 @@ import profilePic from '../../assets/icons8-user-50.png';
 
 import { connect } from 'react-redux';
 import { updateUser } from '../../store/actions/userActions';
-import { getAllergies } from '../../store/actions/allergyActions';
 
 class Profile extends Component {
   state = {
@@ -299,4 +298,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { updateUser, getAllergies })(Profile);
+export default connect(mapStateToProps, { updateUser })(Profile);

@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from 'react-router-dom';
 
 import './App.css';
 
@@ -33,6 +38,7 @@ class App extends Component {
               <Route path="/doctor/new" component={DoctorForm} />
               <Route path="/contact/new" component={ContactForm} />
               <Route exact path="/" component={Home} />
+              <Redirect path="*" to="/" />
             </Switch>
           </div>
         </Router>

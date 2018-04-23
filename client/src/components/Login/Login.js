@@ -28,6 +28,12 @@ class Login extends Component {
   submitHandler = event => {
     event.preventDefault();
     this.props.logIn(this.state.email, this.state.password);
+    this.setState({
+      email: '',
+      password: '',
+      signingIn: false,
+      signedIn: false
+    });
   };
 
   render() {
